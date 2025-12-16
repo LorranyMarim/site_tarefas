@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minhas Tarefas Digital</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    
+    <style>
+        :root {
+            --primary-blue: #0d47a1;
+            --secondary-blue: #1565c0;
+            --light-blue: #e3f2fd;
+            --bg-color: #f5f7fa;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            height: 100vh;
+            overflow: hidden; 
+        }
+
+        .d-none-custom {
+            display: none !important;
+        }
+
+        .auth-container {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+        }
+
+        .auth-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .auth-logo {
+            color: var(--primary-blue);
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .main-layout {
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: white;
+            border-right: 1px solid #dee2e6;
+            display: flex;
+            flex-direction: column;
+            padding: 1rem;
+            transition: all 0.3s;
+        }
+
+        .sidebar-brand {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 2rem;
+            padding-left: 10px;
+        }
+
+        .nav-link {
+            color: #495057;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-link.active {
+            background-color: var(--light-blue);
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        .nav-link:hover {
+            background-color: #f8f9fa;
+        }
+
+        .logout-btn {
+            margin-top: auto;
+            color: #dc3545;
+        }
+        
+        .logout-btn:hover {
+            background-color: #fee2e2;
+            color: #dc3545;
+        }
+
+        .content-area {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .task-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 5px solid var(--secondary-blue);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .task-card:hover {
+            transform: translateY(-2px);
+            background-color: #f8faff; /* Hover effect visual */
+            cursor: pointer; /* Cursor pointer mas sem ação de clique programada */
+        }
+
+        .task-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .task-desc {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .fab-btn {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 10px rgba(13, 71, 161, 0.4);
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
+
+        .fab-btn:hover {
+            background-color: var(--secondary-blue);
+            transform: scale(1.1);
+        }
+
+    </style>
+</head>
+<body>
+
+    <section id="login-screen" class="auth-container">
+        <div class="auth-card animate-fade-in">
+            <div class="auth-logo">
+                <i class="bi bi-check-circle-fill"></i>
+            </div>
+            <h4 class="text-center mb-4 text-primary">Minhas Tarefas Digital</h4>
+            <form id="form-login">
+                <div class="mb-3">
+                    <label for="loginUser" class="form-label">Usuário</label>
+                    <input type="text" class="form-control" id="loginUser" placeholder="admin">
+                </div>
+                <div class="mb-3">
+                    <label for="loginPass" class="form-label">Senha</label>
+                    <input type="password" class="form-control" id="loginPass" placeholder="123">
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="button" class="btn btn-primary btn-lg" onclick="fazerLogin()">Entrar</button>
+                </div>
+                <div class="text-center mt-3">
+                    <a href="#" onclick="irParaCadastro()" class="text-decoration-none">Não tem conta? <strong>Cadastrar</strong></a>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <section id="register-screen" class="auth-container d-none-custom">
+        <div class="auth-card">
+            <div class="auth-logo">
+                <i class="bi bi-person-plus-fill"></i>
+            </div>
+            <h4 class="text-center mb-4 text-primary">Criar Conta</h4>
+            <form id="form-register">
+                <div class="mb-3">
+                    <label class="form-label">Nome Completo</label>
+                    <input type="text" class="form-control" id="regNome">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">E-mail</label>
+                    <input type="email" class="form-control" id="regEmail">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Usuário</label>
+                    <input type="text" class="form-control" id="regUser">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Senha</label>
+                    <input type="password" class="form-control" id="regPass">
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="button" class="btn btn-primary btn-lg" onclick="fazerCadastro()">Cadastrar</button>
+                </div>
+                <div class="text-center mt-3">
+                    <a href="#" onclick="irParaLogin()" class="text-decoration-none">Voltar para Login</a>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <section id="home-screen" class="main-layout d-none-custom">
+        <nav class="sidebar">
+            <div class="sidebar-brand">
+                <i class="bi bi-check-circle-fill"></i>
+                Minhas Tarefas
+            </div>
+            <ul class="nav flex-column mb-auto">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active">
+                        <i class="bi bi-list-task"></i>
+                        Minhas Tarefas
+                    </a>
+                </li>
+            </ul>
+            <a href="#" class="nav-link logout-btn" onclick="fazerLogout()">
+                <i class="bi bi-box-arrow-right"></i>
+                Sair
+            </a>
+        </nav>
+
+        <main class="content-area">
+            <h2 class="mb-4 text-primary">Lista de Atividades</h2>
+            
+            <div id="lista-tarefas">
+                <div class="task-card">
+                    <div class="task-title">Revisar documentação do projeto</div>
+                    <div class="task-desc">Verificar se todos os requisitos foram atendidos conforme a sprint.</div>
+                </div>
+            </div>
+
+            <button class="fab-btn" data-bs-toggle="modal" data-bs-target="#modalTarefa">
+                <i class="bi bi-plus-lg"></i>
+            </button>
+        </main>
+    </section>
+
+    <div class="modal fade" id="modalTarefa" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="modalLabel">Nova Tarefa</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="tituloTarefa" class="form-label">Título da Tarefa</label>
+                        <input type="text" class="form-control" id="tituloTarefa">
+                    </div>
+                    <div class="mb-3">
+                        <label for="descTarefa" class="form-label">Descrição</label>
+                        <textarea class="form-control" id="descTarefa" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="criarTarefa()">Criar Tarefa</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Elementos das Telas
+        const loginScreen = document.getElementById('login-screen');
+        const registerScreen = document.getElementById('register-screen');
+        const homeScreen = document.getElementById('home-screen');
+
+        // Inputs
+        const loginUserIn = document.getElementById('loginUser');
+        const loginPassIn = document.getElementById('loginPass');
+
+        // Navegação Simples (SPA)
+        function mostrarTela(tela) {
+            loginScreen.classList.add('d-none-custom');
+            registerScreen.classList.add('d-none-custom');
+            homeScreen.classList.add('d-none-custom');
+            
+            tela.classList.remove('d-none-custom');
+        }
+
+        function irParaCadastro() {
+            mostrarTela(registerScreen);
+        }
+
+        function irParaLogin() {
+            mostrarTela(loginScreen);
+        }
+
+        // --- LÓGICA DE LOGIN (BUGADA) ---
+        function fazerLogin() {
+            const user = loginUserIn.value;
+            const pass = loginPassIn.value;
+
+            // BUG: Se o usuário for 'admin', entra no sistema se a senha NÃO for vazia ou diferente de 123.
+            // O correto seria: if (user === 'admin' && pass === '123')
+            // O comportamento solicitado: logar com admin e senha diferente entra.
+            
+            if (user === 'admin') {
+                // Simulação do Bug: Se for admin, aceita qualquer coisa (ou verifica de forma errada)
+                // Vamos supor que o código permita entrar se inseriu qualquer coisa no campo senha ou não inseriu nada
+                // O prompt diz: "ao logar com admin e inserir uma senha diferente ou nao inserir uma senha... deve direcionar para home"
+                mostrarTela(homeScreen);
+                limparLogin();
+            } else {
+                alert("Usuário não encontrado!");
+            }
+        }
+
+        function limparLogin() {
+            loginUserIn.value = '';
+            loginPassIn.value = '';
+        }
+
+        // --- LÓGICA DE CADASTRO (BUGADA) ---
+        function fazerCadastro() {
+            // BUG: Não verifica se os campos estão vazios.
+            // BUG: Redireciona para home independentemente de preenchimento.
+            alert("Cadastro realizado com sucesso!"); // Feedback falso
+            mostrarTela(homeScreen);
+            
+            // Limpa campos (opcional, já que o bug principal é permitir vazio)
+            document.getElementById('regNome').value = '';
+            document.getElementById('regEmail').value = '';
+            document.getElementById('regUser').value = '';
+            document.getElementById('regPass').value = '';
+        }
+
+        function fazerLogout() {
+            mostrarTela(loginScreen);
+        }
+
+        // --- LÓGICA DE TAREFAS (BUG NO CANCELAR) ---
+        function criarTarefa() {
+            const titulo = document.getElementById('tituloTarefa').value;
+            const descricao = document.getElementById('descTarefa').value;
+
+            // Criação do elemento HTML
+            if (titulo) {
+                const lista = document.getElementById('lista-tarefas');
+                const novaTarefa = document.createElement('div');
+                novaTarefa.classList.add('task-card');
+                
+                // HTML da tarefa
+                novaTarefa.innerHTML = `
+                    <div class="task-title">${titulo}</div>
+                    <div class="task-desc">${descricao}</div>
+                `;
+
+                // Adiciona ao final da lista
+                lista.appendChild(novaTarefa);
+
+                // Limpa o formulário do modal
+                document.getElementById('tituloTarefa').value = '';
+                document.getElementById('descTarefa').value = '';
+
+                // Fecha o modal programaticamente (apenas o Criar funciona para fechar)
+                const modalEl = document.getElementById('modalTarefa');
+                const modalInstance = bootstrap.Modal.getInstance(modalEl);
+                modalInstance.hide();
+            } else {
+                alert("Por favor, insira pelo menos um título.");
+            }
+        }
+
+        // Nota: O botão "Cancelar" no HTML propositalmente não tem função JS atrelada e nem atributo do Bootstrap.
+    </script>
+</body>
+</html>
