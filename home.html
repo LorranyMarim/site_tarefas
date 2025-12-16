@@ -125,8 +125,8 @@
 
         .task-card:hover {
             transform: translateY(-2px);
-            background-color: #f8faff; /* Hover effect visual */
-            cursor: pointer; /* Cursor pointer mas sem ação de clique programada */
+            background-color: #f8faff; 
+            cursor: pointer; 
         }
 
         .task-title {
@@ -289,16 +289,13 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // Elementos das Telas
         const loginScreen = document.getElementById('login-screen');
         const registerScreen = document.getElementById('register-screen');
         const homeScreen = document.getElementById('home-screen');
 
-        // Inputs
         const loginUserIn = document.getElementById('loginUser');
         const loginPassIn = document.getElementById('loginPass');
 
-        // Navegação Simples (SPA)
         function mostrarTela(tela) {
             loginScreen.classList.add('d-none-custom');
             registerScreen.classList.add('d-none-custom');
@@ -315,19 +312,11 @@
             mostrarTela(loginScreen);
         }
 
-        // --- LÓGICA DE LOGIN (BUGADA) ---
         function fazerLogin() {
             const user = loginUserIn.value;
             const pass = loginPassIn.value;
 
-            // BUG: Se o usuário for 'admin', entra no sistema se a senha NÃO for vazia ou diferente de 123.
-            // O correto seria: if (user === 'admin' && pass === '123')
-            // O comportamento solicitado: logar com admin e senha diferente entra.
-            
             if (user === 'admin') {
-                // Simulação do Bug: Se for admin, aceita qualquer coisa (ou verifica de forma errada)
-                // Vamos supor que o código permita entrar se inseriu qualquer coisa no campo senha ou não inseriu nada
-                // O prompt diz: "ao logar com admin e inserir uma senha diferente ou nao inserir uma senha... deve direcionar para home"
                 mostrarTela(homeScreen);
                 limparLogin();
             } else {
@@ -340,14 +329,10 @@
             loginPassIn.value = '';
         }
 
-        // --- LÓGICA DE CADASTRO (BUGADA) ---
         function fazerCadastro() {
-            // BUG: Não verifica se os campos estão vazios.
-            // BUG: Redireciona para home independentemente de preenchimento.
-            alert("Cadastro realizado com sucesso!"); // Feedback falso
+            alert("Cadastro realizado com sucesso!"); 
             mostrarTela(homeScreen);
             
-            // Limpa campos (opcional, já que o bug principal é permitir vazio)
             document.getElementById('regNome').value = '';
             document.getElementById('regEmail').value = '';
             document.getElementById('regUser').value = '';
@@ -358,31 +343,25 @@
             mostrarTela(loginScreen);
         }
 
-        // --- LÓGICA DE TAREFAS (BUG NO CANCELAR) ---
         function criarTarefa() {
             const titulo = document.getElementById('tituloTarefa').value;
             const descricao = document.getElementById('descTarefa').value;
 
-            // Criação do elemento HTML
             if (titulo) {
                 const lista = document.getElementById('lista-tarefas');
                 const novaTarefa = document.createElement('div');
                 novaTarefa.classList.add('task-card');
                 
-                // HTML da tarefa
                 novaTarefa.innerHTML = `
                     <div class="task-title">${titulo}</div>
                     <div class="task-desc">${descricao}</div>
                 `;
 
-                // Adiciona ao final da lista
                 lista.appendChild(novaTarefa);
 
-                // Limpa o formulário do modal
                 document.getElementById('tituloTarefa').value = '';
                 document.getElementById('descTarefa').value = '';
 
-                // Fecha o modal programaticamente (apenas o Criar funciona para fechar)
                 const modalEl = document.getElementById('modalTarefa');
                 const modalInstance = bootstrap.Modal.getInstance(modalEl);
                 modalInstance.hide();
@@ -391,7 +370,6 @@
             }
         }
 
-        // Nota: O botão "Cancelar" no HTML propositalmente não tem função JS atrelada e nem atributo do Bootstrap.
     </script>
 </body>
 </html>
